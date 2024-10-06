@@ -32,6 +32,7 @@ export default async function Dashboard() {
     .eq('user_id', user.id)
     .order('updated_at', { ascending: false })
 
+  // Fetch notes
   const { data: notes, error: notesError } = await supabase
     .from('notes')
     .select('*')
@@ -39,6 +40,7 @@ export default async function Dashboard() {
     .order('updated_at', { ascending: false })
     .limit(3)
 
+  // Fetch goals
   const { data: goals, error: goalsError } = await supabase
     .from('goals')
     .select('*')
@@ -46,10 +48,19 @@ export default async function Dashboard() {
     .order('progress', { ascending: false })
     .limit(3)
 
+  // Fetch upcoming events
+  const { data: events, error: eventsError } = await supabase
+    .from('events')
+    .select('*')
+    .eq('user_id', user.id)
+    .gte('start_time', new Date().toISOString()) // Get only upcoming events
+    .order('start_time', { ascending: true })
+
   return (
     <ScrollArea className="h-full">
       <div className="max-w-2xl mx-auto py-4">
         <h1 className="text-3xl font-semibold mb-4">Dashboard</h1>
+        
         {/* User Info */}
         <div className="w-full mb-6">
           <div className="bg-gray-100 text-xs p-2 px-4 rounded-md text-gray-800 flex gap-2 items-center">
@@ -146,14 +157,30 @@ export default async function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Calendar Card */}
+          {/* Upcoming Events Card */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-lg font-medium">Upcoming Events</CardTitle>
               <Calendar className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">No upcoming events</p>
+              {eventsError ? (
+                <p className="text-sm text-destructive">Error loading events</p>
+              ) : events && events.length > 0 ? (
+                <div className="space-y-2">
+                  {events.map((event) => (
+                    <div key={event.id} className="flex items-center justify-between p-2 bg-accent rounded-lg">
+                      <span className="text-sm">{event.title} <span className="text-xs text-muted-foreground">(Starts: {new Date(event.start_time).toLocaleDateString()})</span></span>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">More options</span>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No upcoming events</p>
+              )}
             </CardContent>
           </Card>
         </div>

@@ -10,7 +10,7 @@ const navItems = [
   { name: "Projects", icon: Briefcase },
   { name: "Tasks", icon: Calendar },
   { name: "Notes", icon: BookOpen },
-  { name: "Goals", icon: Target },
+  { name: "events", icon: Target },
 ]
 
 export function Sidebar() {
