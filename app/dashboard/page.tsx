@@ -80,12 +80,12 @@ export default async function Dashboard() {
         </div>
 
         {/* Projects and Goals Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Projects Card */}
           <Card className="border border-gray-200 hover:border-gray-300 shadow-sm transition">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
-              <FolderKanban className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-lg font-medium">Active Projects</CardTitle>
+              <FolderKanban className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               {projectsError ? (
@@ -93,10 +93,10 @@ export default async function Dashboard() {
               ) : projects && projects.length > 0 ? (
                 <div className="space-y-4">
                   {projects.map((project) => (
-                    <div key={project.id} className="p-3 bg-white rounded border border-gray-100 hover:shadow-md transition">
+                    <div key={project.id} className="p-3 bg-accent rounded-lg">
                       <h3 className="text-lg font-semibold">{project.name}</h3>
-                      <p className="text-xs text-muted-foreground">Created on: {new Date(project.created_at).toLocaleDateString()}</p>
-                      <div className="space-y-2 mt-2">
+                      <p className="text-xs text-muted-foreground mb-2">Created on: {new Date(project.created_at).toLocaleDateString()}</p>
+                      <div className="space-y-2">
                         {tasksError ? (
                           <p className="text-sm text-destructive">Error loading tasks</p>
                         ) : tasks && tasks.length > 0 ? (
@@ -104,7 +104,7 @@ export default async function Dashboard() {
                             <div key={task.id} className="flex items-center space-x-2">
                               <Checkbox id={`task-${task.id}`} />
                               <label htmlFor={`task-${task.id}`} className="text-sm">
-                                {task.title} <span className="text-xs text-gray-500">(Due: {new Date(task.due_date).toLocaleDateString()})</span>
+                                {task.title} <span className="text-xs text-muted-foreground">(Due: {new Date(task.due_date).toLocaleDateString()})</span>
                               </label>
                             </div>
                           ))
@@ -120,57 +120,46 @@ export default async function Dashboard() {
               )}
             </CardContent>
           </Card>
-        </div>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">No active projects</p>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Goals Card */}
+          
+          {/* Recent Notes */}
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Goals Progress</CardTitle>
-              <Target className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-lg font-medium">Recent Notes</CardTitle>
+              <FileText className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              {goalsError ? (
-                <p className="text-sm text-destructive">Error loading goals</p>
-              ) : goals && goals.length > 0 ? (
-                <div className="space-y-4">
-                  {goals.map((goal) => (
-                    <div key={goal.id}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span>{goal.title}</span>
-                        <span>{goal.progress}%</span>
-                      </div>
-                      <div className="w-full bg-secondary rounded-full h-2.5">
-                        <div
-                          className="bg-primary h-2.5 rounded-full"
-                          style={{ width: `${goal.progress}%` }}
-                        ></div>
-                      </div>
+              {notesError ? (
+                <p className="text-sm text-destructive">Error loading notes</p>
+              ) : notes && notes.length > 0 ? (
+                <div className="space-y-2">
+                  {notes.map((note) => (
+                    <div key={note.id} className="flex items-center justify-between p-2 bg-accent rounded-lg">
+                      <span className="text-sm">{note.title}</span>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">More options</span>
+                      </Button>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No goals set</p>
+                <p className="text-sm text-muted-foreground">No notes available</p>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Calendar Card */}
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-lg font-medium">Upcoming Events</CardTitle>
+              <Calendar className="h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">No upcoming events</p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Recent Notes */}
-        <div>
-          <h2 className="text-lg font-semibold mb-2">Recent Notes</h2>
-          {notesError ? (
-            <p className="text-sm text-destructive">Error loading notes</p>
-          ) : notes && notes.length > 0 ? (
-            <div className="space-y-2">
-              {notes.map((note) => (
-                <div key={note.id} className="flex items-center justify-between p-2 border border-border rounded">
-                  <span className="text-sm">{note.title}</span>
                   <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
                 </div>
               ))}
