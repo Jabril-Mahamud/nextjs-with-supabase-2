@@ -8,7 +8,7 @@ import { Plus, Target, MoreHorizontal, InfoIcon, FolderKanban } from 'lucide-rea
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 
-export default async function NotionLifeOSHome() {
+export default async function Dashboard() {
   const supabase = createClient()
 
   const {
@@ -19,19 +19,19 @@ export default async function NotionLifeOSHome() {
     return redirect("/sign-in")
   }
 
+  // Fetch tasks with project data
   const { data: tasks, error: tasksError } = await supabase
     .from('tasks')
-    .select('*, projects(name)') // Fetching associated project names
+    .select('*, projects(name)')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
-    .limit(5)
 
+  // Fetch projects
   const { data: projects, error: projectsError } = await supabase
     .from('projects')
     .select('*')
     .eq('user_id', user.id)
     .order('updated_at', { ascending: false })
-    .limit(3)
 
   const { data: notes, error: notesError } = await supabase
     .from('notes')
@@ -51,7 +51,7 @@ export default async function NotionLifeOSHome() {
     <ScrollArea className="h-full">
       <div className="max-w-3xl mx-auto py-8">
         <h1 className="text-4xl font-bold mb-6">LifeOS Home</h1>
-        
+
         {/* User Info */}
         <div className="w-full mb-8">
           <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
@@ -91,11 +91,26 @@ export default async function NotionLifeOSHome() {
               {projectsError ? (
                 <p className="text-sm text-destructive">Error loading projects</p>
               ) : projects && projects.length > 0 ? (
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {projects.map((project) => (
-                    <div key={project.id} className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{project.name}</span>
-                      <Badge variant="outline">{project.status}</Badge>
+                    <div key={project.id}>
+                      <h3 className="text-lg font-semibold">{project.name}</h3>
+                      <div className="space-y-2">
+                        {tasksError ? (
+                          <p className="text-sm text-destructive">Error loading tasks</p>
+                        ) : tasks && tasks.length > 0 ? (
+                          tasks.filter(task => task.project_id === project.id).map((task) => (
+                            <div key={task.id} className="flex items-center space-x-2">
+                              <Checkbox id={`task-${task.id}`} />
+                              <label htmlFor={`task-${task.id}`} className="text-sm">
+                                {task.title}
+                              </label>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-muted-foreground">No tasks for this project</p>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -123,8 +138,8 @@ export default async function NotionLifeOSHome() {
                         <span>{goal.progress}%</span>
                       </div>
                       <div className="w-full bg-secondary rounded-full h-2.5">
-                        <div 
-                          className="bg-primary h-2.5 rounded-full" 
+                        <div
+                          className="bg-primary h-2.5 rounded-full"
                           style={{ width: `${goal.progress}%` }}
                         ></div>
                       </div>
@@ -136,25 +151,6 @@ export default async function NotionLifeOSHome() {
               )}
             </CardContent>
           </Card>
-        </div>
-
-        {/* Today's Tasks */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-2">Today's Tasks</h2>
-          {tasksError ? (
-            <p className="text-sm text-destructive">Error loading tasks</p>
-          ) : tasks && tasks.length > 0 ? (
-            <div className="space-y-2">
-              {tasks.map((task) => (
-                <div key={task.id} className="flex items-center space-x-2">
-                  <Checkbox id={`task-${task.id}`} />
-                  <label htmlFor={`task-${task.id}`} className="text-sm">{task.title} {task.projects?.name && `(${task.projects.name})`}</label>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">No tasks for today</p>
-          )}
         </div>
 
         {/* Recent Notes */}

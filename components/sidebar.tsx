@@ -6,15 +6,16 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 const navItems = [
-  { name: "Home", icon: Home },
-  { name: "Tasks", icon: Calendar },
-  { name: "Journal", icon: BookOpen },
-  { name: "Goals", icon: Target },
+  { name: "Dashboard", icon: Home },
   { name: "Projects", icon: Briefcase },
+  { name: "Tasks", icon: Calendar },
+  { name: "Notes", icon: BookOpen },
+  { name: "Goals", icon: Target },
 ]
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
+  
   return (
     <div
       className={cn(
@@ -23,9 +24,7 @@ export function Sidebar() {
       )}
     >
       <div className="flex items-center justify-between p-4">
-        {!isCollapsed && (
-          <span className="font-semibold">LifeOS</span>
-        )}
+        {!isCollapsed && <span className="font-semibold">LifeOS</span>}
         <Button
           variant="ghost"
           size="icon"
@@ -41,7 +40,7 @@ export function Sidebar() {
             key={item.name}
             href={`/${item.name.toLowerCase()}`}
             className={cn(
-              "flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent",
+              "flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent transition-colors duration-300",
               isCollapsed && "justify-center"
             )}
           >
