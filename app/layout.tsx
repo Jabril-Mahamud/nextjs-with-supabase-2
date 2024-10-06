@@ -37,16 +37,17 @@ export default function RootLayout({
             <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
               <div className="w-full max-w-7xl flex justify-between items-center p-3 px-5 text-sm">
                 <div className="flex gap-5 items-center font-semibold">
-                  <Link href={"/"}>LifeOS</Link>
+                  <Link href={"/"}>Next.js Supabase Starter</Link>
                   <div className="flex items-center gap-2">
+                    <DeployButton />
                   </div>
                 </div>
                 {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
               </div>
             </nav>
-            <div className="flex flex-1">
+            <div className="flex flex-1 h-[calc(100vh-4rem)]"> {/* Adjusted height */}
               <Sidebar />
-              <main className="flex-1 p-8">
+              <main className="flex-1 p-8 overflow-y-auto">
                 <div className="max-w-5xl mx-auto">
                   {children}
                 </div>

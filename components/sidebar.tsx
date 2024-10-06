@@ -17,7 +17,7 @@ export function Sidebar() {
 
   return (
     <div className={`h-full border-r border-gray-200 transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>
-      <div className="sticky top-0 bg-background">
+      <div className="h-full flex flex-col bg-background">
         <div className="flex items-center justify-between p-4">
           <div className={`flex items-center space-x-2 ${isCollapsed ? 'hidden' : ''}`}>
             <div className="w-6 h-6 bg-gray-200 rounded"></div>
@@ -30,7 +30,7 @@ export function Sidebar() {
             {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
         </div>
-        <nav className="p-2">
+        <nav className="flex-1 p-2">
           <ul className="space-y-2">
             {navItems.map((item) => (
               <li key={item.name}>
