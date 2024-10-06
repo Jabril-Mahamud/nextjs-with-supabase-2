@@ -3,8 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Target, MoreHorizontal, InfoIcon, FolderKanban } from 'lucide-react'
+import { Plus, Target, MoreHorizontal, InfoIcon, FolderKanban, FileText, Calendar } from 'lucide-react'
 import { createClient } from "@/utils/supabase/server"
 import { redirect } from "next/navigation"
 
@@ -57,7 +56,6 @@ export default async function Dashboard() {
             <InfoIcon size="14" strokeWidth={1.5} />
             Welcome back, {user.email}!
           </div>
-        </div>
         </div>
 
         {/* Quick Add */}
@@ -158,15 +156,6 @@ export default async function Dashboard() {
               <p className="text-sm text-muted-foreground">No upcoming events</p>
             </CardContent>
           </Card>
-        </div>
-
-                  <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">No notes available</p>
-          )}
         </div>
       </div>
     </ScrollArea>
