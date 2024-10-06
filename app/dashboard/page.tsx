@@ -49,15 +49,15 @@ export default async function Dashboard() {
 
   return (
     <ScrollArea className="h-full">
-      <div className="max-w-3xl mx-auto py-8">
-        <h1 className="text-4xl font-bold mb-6">LifeOS Home</h1>
-
+      <div className="max-w-2xl mx-auto py-4">
+        <h1 className="text-3xl font-semibold mb-4">Dashboard</h1>
         {/* User Info */}
-        <div className="w-full mb-8">
-          <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-            <InfoIcon size="16" strokeWidth={2} />
+        <div className="w-full mb-6">
+          <div className="bg-gray-100 text-xs p-2 px-4 rounded-md text-gray-800 flex gap-2 items-center">
+            <InfoIcon size="14" strokeWidth={1.5} />
             Welcome back, {user.email}!
           </div>
+        </div>
         </div>
 
         {/* Quick Add */}
